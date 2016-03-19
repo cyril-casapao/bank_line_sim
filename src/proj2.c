@@ -38,10 +38,7 @@ int check_tellers(int tellers[], int num_tellers);
 void decrement_tellers(int tellers[], int num_tellers);
 
 /**
-* The main function. It simply asks the user to specify the number of tellers
-* to use in the simulation and then runs it.
-*
-* @TODO: Input error checking.
+* The main function. It reads the data file and runs the simulation.
 */
 int main() {
     printf("Welcome to Bank Simulator!\n\n");
@@ -62,8 +59,6 @@ int main() {
 
 /**
 * Runs the simulation.
-*
-* @TODO: Figure out how to represent tellers.
 *
 * @param numTellers
 *   The number of tellers
