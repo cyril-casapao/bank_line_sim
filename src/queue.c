@@ -31,19 +31,15 @@ void enque(int id) {
 
 
 /**
-* Removes the node at the front of the queue. This function returns the ID of
-* the node that is dequeued and a -1 if the queue is empty.
+* Removes the node at the front of the queue. Additionally, this function
+* returns the ID of the node that is dequeued.
 *
 * @return
-*   The ID of the customer at the front of the queue
+*   The ID of the removed node; -1 if the queue is empty
 */
 int deque() {
-
-    // Deque removes the node at the front
-    node* to_deque = front;
-
-    // The ID of the node we remove
     int id;
+    node* to_deque = front;
 
     if(front == NULL) {
         // Case 1: Queue is empty
@@ -60,7 +56,6 @@ int deque() {
         front = front->next;
         free(to_deque);
     }
-
     return id;
 }
 
