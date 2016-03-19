@@ -25,6 +25,8 @@
 /* Function prototypes */
 void simulation(int num_tellers);
 int customer_arrival(int stats[]);
+int check_tellers(int tellers[], int num_tellers);
+void decrement_tellers(int tellers[], int num_tellers);
 
 /**
 * The main function. It simply asks the user to specify the number of tellers
@@ -54,6 +56,9 @@ int main() {
 */
 void simulation(int num_tellers) {
 
+    /* Initialize the tellers */
+    int tellers[num_tellers]; // See free_tellers() documentation for details
+
     /* Read the data file */
     int stats[5];
     read_file(FILE_NAME, stats);
@@ -61,14 +66,15 @@ void simulation(int num_tellers) {
     /* Initialize statistics */
     int total_customers = 0; // This doubles as customer ID
     int sim_time;
-    double service_time;
 
     /* Run the simulation for the work day */
     for(sim_time = 0; sim_time < DAY_LENGTH; sim_time++) {
 
+        /* Decrease time left in any unavailable tellers */
+        decrement_tellers(tellers, num_tellers);
+
         /* First, a random number of customers arrives */
         int num_arrivals = customer_arrival(stats);
-        printf("%d customers have arrived!\n", num_arrivals);
         int current_customer = 0;
 
         /* Enqueue each new arrival */
@@ -77,18 +83,13 @@ void simulation(int num_tellers) {
             current_customer++;
         }
 
-        /* Deque customers */
-        while(!is_empty()) {
-            int removed = deque();
-            // printf("Customer %d is done!\n", removed);
+        /* Move customers to available tellers if possible */
+        int teller_num;
+        while(teller_num = check_tellers(tellers, num_tellers), teller_num > 0 && !is_empty()) {
+            deque();
+            tellers[teller_num] = (int) expdist(AVG_SERVICE);
         }
-
-        /* Get the amount of time taken to service a customer
-        service_time = expdist(AVG_SERVICE);
-        printf("sim_time = %d, service_time = %0.5f\n", sim_time, service_time); */
     }
-
-
 }
 
 
@@ -109,4 +110,44 @@ int customer_arrival(int stats[]) {
         prev_range += stats[i];
     }
     return i;
+}
+
+
+/**
+* Checks if there are any free tellers. Each index of the tellers[] array
+* holds the number of minutes until that teller is free. For exammple, if
+* tellers[2] == 3.0, that means there are 3 minutes until teller #2 is
+* available.
+*
+* @param tellers
+*   The array of tellers
+* @param num_tellers
+*   The number of tellers
+* @return
+*   The index of the free teller; -1 if there are no free tellers
+*/
+int check_tellers(int tellers[], int num_tellers) {
+    int i;
+    for(i = 0; i < num_tellers; i++) {
+        if(tellers[i] == 0)
+            return i;
+    }
+    return -1;
+}
+
+
+/**
+* Decreases the time remaining for every unavailable teller by 1.
+*
+* @param tellers
+*   The array of tellers
+* @param num_tellers
+*   The number of tellers
+*/
+void decrement_tellers(int tellers[], int num_tellers) {
+    int i;
+    for(i = 0; i < num_tellers; i++) {
+        if(tellers[i] > 0)
+            tellers[i]--;
+    }
 }
