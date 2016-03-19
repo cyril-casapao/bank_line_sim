@@ -5,7 +5,9 @@
 */
 
 #include <stdio.h>
-#include "../inc/util.h"
+#include "../inc/stats.h"
+
+// Change FILE_NAME to  use a different data file
 #define FILE_NAME "../proj2.dat"
 
 void simulation(int numTellers);
@@ -17,6 +19,7 @@ void simulation(int numTellers);
 * @TODO: Input error checking.
 */
 int main() {
+    printf("Welcome to Bank Simulator!\n\n");
     printf("Please enter the number of tellers: ");
     int numTellers;
     scanf("%d", &numTellers);
@@ -34,11 +37,8 @@ int main() {
 *   The number of tellers
 */
 void simulation(int numTellers) {
+
+    // Read the data file
     int stats[5];
     read_file(FILE_NAME, stats);
-
-    int i;
-    for(i = 0; i < 5; i++) {
-        printf("%d: %d\n", i, stats[i]);
-    }
 }

@@ -9,7 +9,7 @@ LIBS=-lm
 
 # Dependencies and object files
 DEPS=util.h stats.h queue.h
-OBJ=proj2.o util.o stats.o queue.o
+OBJ=proj2.o stats.o queue.o
 
 $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
