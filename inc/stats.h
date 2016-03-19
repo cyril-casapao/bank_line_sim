@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <float.h>
-#include <stdlib.h>
 #include <math.h>
 
 /* Macro definitions */
