@@ -5,6 +5,8 @@
 */
 
 #include <stdio.h>
+#include "../inc/util.h"
+#define FILE_NAME "../proj2.dat"
 
 void simulation(int numTellers);
 
@@ -32,5 +34,11 @@ int main() {
 *   The number of tellers
 */
 void simulation(int numTellers) {
-    printf("yaaaay\n");
+    int stats[5];
+    read_file(FILE_NAME, stats);
+
+    int i;
+    for(i = 0; i < 5; i++) {
+        printf("%d: %d\n", i, stats[i]);
+    }
 }

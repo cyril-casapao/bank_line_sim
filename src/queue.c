@@ -5,8 +5,7 @@
 *
 * @author Cyril Casapao
 */
-
-#include "queue.h"
+#include "../inc/queue.h"
 
 /**
 * Adds a node to the end of the queue with the given data.
@@ -26,7 +25,7 @@ void enque(int id) {
 *   The node at the front of the queue
 */
 node deque() {
-
+    
 }
 
 
@@ -37,5 +36,5 @@ node deque() {
 *   The number of nodes in the queue.
 */
 int size() {
-
+    return -1;
 }
