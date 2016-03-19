@@ -34,8 +34,6 @@ double expdist(double mean) {
 *   The name of the file containing the stats
 */
 void read_file(char* file_name, int stats[]) {
-    printf("Attempting to open %s...\n", file_name);
-
     FILE* f = fopen(file_name, "r");
     if(f == NULL) {
         exit(EXIT_FAILURE);
@@ -46,6 +44,4 @@ void read_file(char* file_name, int stats[]) {
         fscanf(f, "%d", stats + offset);
     }
     fclose(f);
-
-    printf("\nSuccessfully read %s.\n", file_name);
 }

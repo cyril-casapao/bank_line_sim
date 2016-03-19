@@ -10,20 +10,29 @@
 *   4) Average length of waiting line
 *   5) Max length of waiting line
 *
+* This program automatically runs the simulation multiple times for varying
+* numbers of tellers.
+*
 * @author Cyril Casapao
 */
 
 #include "../inc/stats.h"
 #include "../inc/queue.h"
 
-// Change FILE_NAME to  use a different data file
+// Change FILE_NAME to use a different data file
 #define FILE_NAME "../proj2.dat"
 
 // The length of the work day to simulate (in minutes)
 #define DAY_LENGTH 480
 
+// The minimum number of tellers
+#define MIN_TELLER_COUNT 4
+
+// The maximum number of tellers
+#define MAX_TELLER_COUNT 7
+
 /* Function prototypes */
-void simulation(int num_tellers);
+void simulation(int num_tellers, int stats[]);
 int customer_arrival(int stats[]);
 int check_tellers(int tellers[], int num_tellers);
 void decrement_tellers(int tellers[], int num_tellers);
@@ -36,12 +45,17 @@ void decrement_tellers(int tellers[], int num_tellers);
 */
 int main() {
     printf("Welcome to Bank Simulator!\n\n");
-    printf("Please enter the number of tellers: ");
-    int num_tellers;
-    scanf("%d", &num_tellers);
 
-    printf("Running simulation with %d tellers...\n\n", num_tellers);
-    simulation(num_tellers);
+    /* Read the data file */
+    int stats[5];
+    read_file(FILE_NAME, stats);
+
+    /* Run the simulation multiple times for different amounts of tellers */
+    int num_tellers;
+    for(num_tellers = MIN_TELLER_COUNT; num_tellers <= MAX_TELLER_COUNT; num_tellers++) {
+        printf("Running simulation with %d tellers...\n\n", num_tellers);
+        simulation(num_tellers, stats);
+    }
     return 0;
 }
 
@@ -54,36 +68,32 @@ int main() {
 * @param numTellers
 *   The number of tellers
 */
-void simulation(int num_tellers) {
+void simulation(int num_tellers, int stats[]) {
 
-    /* Initialize the tellers */
-    int tellers[num_tellers]; // See free_tellers() documentation for details
+    // See free_tellers() documentation for details about this array
+    int tellers[num_tellers];
 
-    /* Read the data file */
-    int stats[5];
-    read_file(FILE_NAME, stats);
-
-    /* Initialize statistics */
-    int total_customers = 0; // This doubles as customer ID
-    int sim_time;
+     // This doubles as customer ID
+    int total_customers = 0;
 
     /* Run the simulation for the work day */
+    int sim_time;
     for(sim_time = 0; sim_time < DAY_LENGTH; sim_time++) {
 
-        /* Decrease time left in any unavailable tellers */
+        /* First, decrease time left in any unavailable tellers */
         decrement_tellers(tellers, num_tellers);
 
-        /* First, a random number of customers arrives */
+        /* Second, a random number of customers arrives */
         int num_arrivals = customer_arrival(stats);
         int current_customer = 0;
 
-        /* Enqueue each new arrival */
+        /* Third, enque each new arrival */
         while(current_customer < num_arrivals) {
             enque(total_customers++);
             current_customer++;
         }
 
-        /* Move customers to available tellers if possible */
+        /* Lastly, move customers to available tellers if possible */
         int teller_num;
         while(teller_num = check_tellers(tellers, num_tellers), teller_num > 0 && !is_empty()) {
             deque();
