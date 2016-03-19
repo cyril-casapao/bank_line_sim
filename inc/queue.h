@@ -9,6 +9,7 @@
 
 /* Includes */
 #include <stdio.h>
+#include <stdlib.h>
 
 /* Node definition */
 typedef struct node node;
@@ -18,9 +19,13 @@ struct node {
     node* next;
 };
 
+node* front;
+node* rear;
+
 /* Function prototypes */
 void enque(int data);
-node deque();
+int deque();
+int is_empty();
 int size();
 
 #endif // _QUEUE_H_

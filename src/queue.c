@@ -10,22 +10,69 @@
 /**
 * Adds a node to the end of the queue with the given data.
 *
-* @param data
-*   The data to add to the end of the queue
+* @param id
+*   The ID of the customer to add to the end of the queue
 */
 void enque(int id) {
+    node* to_enque = (node*) malloc(sizeof(node));
+    to_enque->id = id;
+    to_enque->next = NULL;
 
+    if(front == NULL && rear == NULL) {
+        // Case 1: Insert into empty queue
+        front = to_enque;
+        rear = to_enque;
+    } else {
+        // Case 2: Insert into non-empty queue
+        rear->next = to_enque;
+        rear = to_enque;
+    }
 }
 
 
 /**
-* Removes the node at the front of the queue.
+* Removes the node at the front of the queue. This function returns the ID of
+* the node that is dequeued and a -1 if the queue is empty.
 *
 * @return
-*   The node at the front of the queue
+*   The ID of the customer at the front of the queue
 */
-node deque() {
-    
+int deque() {
+
+    // Deque removes the node at the front
+    node* to_deque = front;
+
+    // The ID of the node we remove
+    int id;
+
+    if(front == NULL) {
+        // Case 1: Queue is empty
+        id = -1;
+    } else if(front == rear) {
+        // Case 2: Queue has one element
+        id = front->id;
+        front = NULL;
+        rear = NULL;
+        free(to_deque);
+    } else {
+        // Case 3: Queue has more than one element
+        id = to_deque->id;
+        front = front->next;
+        free(to_deque);
+    }
+
+    return id;
+}
+
+
+/**
+* Returns whether or not the queue is empty.
+*
+* @return
+*   1 if the queue is empty, 0 otherwise
+*/
+int is_empty() {
+    return (front == NULL && rear == NULL) ? 1 : 0;
 }
 
 
@@ -36,5 +83,11 @@ node deque() {
 *   The number of nodes in the queue.
 */
 int size() {
-    return -1;
+    node* current = front;
+    int count = 0;
+    while(current != NULL) {
+        current = current->next;
+        count++;
+    }
+    return count;
 }
