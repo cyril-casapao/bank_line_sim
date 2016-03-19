@@ -11,11 +11,12 @@
 #include <stdio.h>
 
 /* Node definition */
-typedef struct node {
+typedef struct node node;
+struct node {
     int id;
     int arrival_time;
     node* next;
-} node;
+};
 
 /* Function prototypes */
 void enque(int data);
