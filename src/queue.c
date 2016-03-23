@@ -12,10 +12,13 @@
 *
 * @param id
 *   The ID of the customer to add to the end of the queue
+* @param arrival_time
+*   The time in minutes since the simulation began
 */
-void enque(int id) {
+void enque(int id, int arrival_time) {
     node* to_enque = (node*) malloc(sizeof(node));
     to_enque->id = id;
+    to_enque->arrival_time = arrival_time;
     to_enque->next = NULL;
 
     if(front == NULL && rear == NULL) {
@@ -32,31 +35,33 @@ void enque(int id) {
 
 /**
 * Removes the node at the front of the queue. Additionally, this function
-* returns the ID of the node that is dequeued.
+* returns the arrival time (in mins since simulation began) of the customer
+* that the removed node represents. This time can be used to calculate the
+* time the customer spent waiting in line.
 *
 * @return
-*   The ID of the removed node; -1 if the queue is empty
+*   The arrival time of the removed node; -1 if the queue is empty
 */
 int deque() {
-    int id;
+    int arrival_time;
     node* to_deque = front;
 
     if(front == NULL) {
         // Case 1: Queue is empty
-        id = -1;
+        arrival_time = -1;
     } else if(front == rear) {
         // Case 2: Queue has one element
-        id = front->id;
+        arrival_time = front->arrival_time;
         front = NULL;
         rear = NULL;
         free(to_deque);
     } else {
         // Case 3: Queue has more than one element
-        id = to_deque->id;
+        arrival_time = to_deque->arrival_time;
         front = front->next;
         free(to_deque);
     }
-    return id;
+    return arrival_time;
 }
 
 

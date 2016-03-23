@@ -23,7 +23,7 @@ node* front;
 node* rear;
 
 /* Function prototypes */
-void enque(int data);
+void enque(int data, int arrival_time);
 int deque();
 int is_empty();
 int size();
