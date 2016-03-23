@@ -52,6 +52,7 @@ int main() {
     for(num_tellers = MIN_TELLER_COUNT; num_tellers <= MAX_TELLER_COUNT; num_tellers++) {
         printf("Running simulation with %d tellers...\n\n", num_tellers);
         simulation(num_tellers, stats);
+        printf("\nSimulation with %d tellers complete!\n\n\n", num_tellers);
     }
     return 0;
 }
@@ -71,6 +72,12 @@ void simulation(int num_tellers, int stats[]) {
      // This doubles as customer ID
     int total_customers = 0;
 
+    // Statstics collected during simulation
+    int max_wait = 0;
+    int max_line_len = 0;
+    int current_line_len = 0;
+    int total_wait, total_line_len;
+
     /* Run the simulation for the work day */
     int sim_time;
     for(sim_time = 0; sim_time < DAY_LENGTH; sim_time++) {
@@ -84,17 +91,35 @@ void simulation(int num_tellers, int stats[]) {
 
         /* Third, enque each new arrival */
         while(current_customer < num_arrivals) {
-            enque(total_customers++);
+            enque(total_customers++, sim_time);
             current_customer++;
         }
 
         /* Lastly, move customers to available tellers if possible */
         int teller_num;
+        int num_completions = 0;
         while(teller_num = check_tellers(tellers, num_tellers), teller_num > 0 && !is_empty()) {
-            deque();
+            int arrival_time = deque();
             tellers[teller_num] = (int) expdist(AVG_SERVICE);
+
+            // Collect stats
+            int wait_time = sim_time - arrival_time;
+            total_wait +=  wait_time;
+            max_wait = wait_time > max_wait ? wait_time : max_wait;
+            num_completions++;
         }
+        current_line_len = (current_line_len + num_arrivals) - num_completions;
+        total_line_len += current_line_len;
+        max_line_len = current_line_len > max_line_len ? current_line_len : max_line_len;
     }
+    int avg_line_len = total_line_len / total_customers;
+    int avg_wait = total_wait / total_customers;
+
+    printf("Total number of customers served: %d\n", total_customers);
+    printf("Average time spent waiting in line: %d mins\n", avg_wait);
+    printf("Maximum time spent waiting in line: %d mins\n", max_wait);
+    printf("Average length of line: %d\n", avg_line_len);
+    printf("Maximum length of line: %d\n", max_line_len);
 }
 
 
