@@ -35,8 +35,8 @@
 /* Function prototypes */
 void simulation(int num_tellers, int stats[]);
 int customer_arrival(int stats[]);
-int check_tellers(int tellers[], int num_tellers);
-void decrement_tellers(int tellers[], int num_tellers);
+int check_tellers(double tellers[], int num_tellers);
+void decrement_tellers(double tellers[], int num_tellers);
 
 /**
 * The main function. It reads the data file and runs the simulation.
@@ -69,16 +69,18 @@ int main() {
 void simulation(int num_tellers, int stats[]) {
 
     // See free_tellers() documentation for details about this array
-    int tellers[num_tellers];
+    double tellers[num_tellers];
 
      // This doubles as customer ID
     int total_customers = 0;
 
     // Statstics collected during simulation
-    int max_wait = 0;
+
     int max_line_len = 0;
     int current_line_len = 0;
-    int total_wait, total_line_len;
+    int total_line_len;
+    double max_wait = 0.0;
+    double total_wait = 0.0;
 
     /* Run the simulation for the work day */
     int sim_time;
@@ -100,12 +102,12 @@ void simulation(int num_tellers, int stats[]) {
         /* Lastly, move customers to available tellers if possible */
         int teller_num;
         int num_completions = 0;
-        while(teller_num = check_tellers(tellers, num_tellers), teller_num > 0 && !is_empty()) {
+        while(teller_num = check_tellers(tellers, num_tellers), teller_num >= 0 && !is_empty()) {
             int arrival_time = deque();
-            tellers[teller_num] = (int) expdist(AVG_SERVICE);
-            // printf("tellers[%d]: %d\n", teller_num, tellers[teller_num]);
+            tellers[teller_num] = expdist(AVG_SERVICE);
+
             // Collect stats
-            int wait_time = sim_time - arrival_time;
+            double wait_time = (double) (sim_time - arrival_time);
             total_wait +=  wait_time;
             max_wait = wait_time > max_wait ? wait_time : max_wait;
             num_completions++;
@@ -115,13 +117,18 @@ void simulation(int num_tellers, int stats[]) {
         max_line_len = current_line_len > max_line_len ? current_line_len : max_line_len;
     }
     int avg_line_len = total_line_len / total_customers;
-    int avg_wait = total_wait / total_customers;
+    double avg_wait = total_wait / total_customers;
 
     printf("Total number of customers served: %d\n", total_customers);
-    printf("Average time spent waiting in line: %d mins\n", avg_wait);
-    printf("Maximum time spent waiting in line: %d mins\n", max_wait);
+    printf("Average time spent waiting in line: %0.000f mins\n", avg_wait);
+    printf("Maximum time spent waiting in line: %0.000f mins\n", max_wait);
     printf("Average length of line: %d\n", avg_line_len);
     printf("Maximum length of line: %d\n", max_line_len);
+
+    // Empty the queue
+    while(!is_empty()) {
+        deque();
+    }
 }
 
 
@@ -158,10 +165,10 @@ int customer_arrival(int stats[]) {
 * @return
 *   The index of the free teller; -1 if there are no free tellers
 */
-int check_tellers(int tellers[], int num_tellers) {
+int check_tellers(double tellers[], int num_tellers) {
     int i;
     for(i = 0; i < num_tellers; i++) {
-        if(tellers[i] == 0)
+        if(tellers[i] <= 0.0)
             return i;
     }
     return -1;
@@ -176,10 +183,10 @@ int check_tellers(int tellers[], int num_tellers) {
 * @param num_tellers
 *   The number of tellers
 */
-void decrement_tellers(int tellers[], int num_tellers) {
+void decrement_tellers(double tellers[], int num_tellers) {
     int i;
     for(i = 0; i < num_tellers; i++) {
-        if(tellers[i] > 0)
-            tellers[i]--;
+        if(tellers[i] > 0.0)
+            tellers[i] -= 1.0;
     }
 }
