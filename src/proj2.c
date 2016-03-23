@@ -16,6 +16,7 @@
 * @author Cyril Casapao
 */
 
+#include <time.h>
 #include "../inc/stats.h"
 #include "../inc/queue.h"
 
@@ -41,6 +42,7 @@ void decrement_tellers(int tellers[], int num_tellers);
 * The main function. It reads the data file and runs the simulation.
 */
 int main() {
+    srand(time(NULL));
     printf("Welcome to Bank Simulator!\n\n");
 
     /* Read the data file */
@@ -101,7 +103,7 @@ void simulation(int num_tellers, int stats[]) {
         while(teller_num = check_tellers(tellers, num_tellers), teller_num > 0 && !is_empty()) {
             int arrival_time = deque();
             tellers[teller_num] = (int) expdist(AVG_SERVICE);
-
+            // printf("tellers[%d]: %d\n", teller_num, tellers[teller_num]);
             // Collect stats
             int wait_time = sim_time - arrival_time;
             total_wait +=  wait_time;
