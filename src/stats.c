@@ -1,7 +1,14 @@
 /**
 * stats.c
 *
-* This file contains functions used to collect required data.
+* This file contains functions used to collect required data. The statistics
+* collected are as follows:
+*
+*   1) Total number of customers served in one day
+*   2) Average time customers wait in line
+*   3) Max time a customer waits in line
+*   4) Average length of waiting line
+*   5) Max length of waiting line
 *
 * @author Cyril Casapao
 */
