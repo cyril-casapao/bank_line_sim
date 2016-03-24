@@ -75,10 +75,9 @@ void simulation(int num_tellers, int stats[]) {
     int total_customers = 0;
 
     // Statstics collected during simulation
-
     int max_line_len = 0;
     int current_line_len = 0;
-    int total_line_len;
+    int total_line_len = 0;
     double max_wait = 0.0;
     double total_wait = 0.0;
 
@@ -112,11 +111,12 @@ void simulation(int num_tellers, int stats[]) {
             max_wait = wait_time > max_wait ? wait_time : max_wait;
             num_completions++;
         }
+
         current_line_len = (current_line_len + num_arrivals) - num_completions;
         total_line_len += current_line_len;
         max_line_len = current_line_len > max_line_len ? current_line_len : max_line_len;
     }
-    int avg_line_len = total_line_len / total_customers;
+    int avg_line_len = total_line_len / DAY_LENGTH;
     double avg_wait = total_wait / total_customers;
 
     printf("Total number of customers served: %d\n", total_customers);
